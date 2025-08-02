@@ -1,0 +1,19 @@
+@import './assets/styles.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layerbase {
+  html {
+    font-family: "Inter", sans-serif;
+  }
+
+  h1, .font-grotesk {
+    font-family: "Space Grotesk", sans-serif;
+  }
+
+  .font-inter {
+    font-family: "Inter", sans-serif;
+  }
+}
