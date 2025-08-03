@@ -324,12 +324,12 @@ export default function App() {
           <div className="w-full max-w-3xl bg-white/80 text-black backdrop-blur p-6 rounded-xl shadow-md">
             <h2 className="text-xl font-bold mb-4">ℹ️ About Camp Genesis Minter</h2>
             <p className="text-sm leading-relaxed">
-              <strong>Camp Genesis Minter</strong> is a lightweight NFT minting dApp built by <strong>slamsmart</strong> for the <strong>Wizz x Camp Builder Bounty</strong> competition.<br /><br />
+              <strong>Camp Genesis Minter</strong> is a lightweight NFT minting dApp built by <strong>slamsmart</strong> for the <strong>Wizz x Camp Builder Bounty</strong> contest.<br /><br />
               This project aims to provide a seamless and fully on-chain experience for minting, tracking, and showcasing NFTs on the Camp Network (BaseCAMP Testnet).<br /><br />
               Built with:
               <ul className="list-disc ml-5 mt-1">
                 <li>🛠 Origin SDK for wallet interaction and NFT minting</li>
-                <li>🧩 React + Tailwind for UI</li>
+                <li>🧩 React + Vite + Tailwind for UI</li>
                 <li>🛰 BlockScout API integration for real-time transaction & NFT gallery fetch</li>
               </ul>
               <br />
