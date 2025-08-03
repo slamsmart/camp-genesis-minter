@@ -174,11 +174,8 @@ export default function App() {
       </div>
 
       <header className="relative z-10 text-white text-center py-10 px-4">
-        <h1 className="text-6xl font-grotesk font-bold text-white drop-shadow-[0_0_9px_black] flex items-center justify-center gap-4 mb-6">
-          <img src="/tent.png" alt="tent" className="h-14 w-14" />
-          Camp Genesis Minter
-          <img src="/tent.png" alt="tent" className="h-14 w-14" />
-        </h1>
+        <h1 className="text-7xl font-grotesk font-bold text-white drop-shadow-[0_0_9px_black] flex items-center justify-center gap-4 mb-6">
+         Camp Genesis Minter</h1>
         <p className="text-3xl font-inter font-bold text-white drop-shadow-[0_0_15px_black] mb-4">
           "Start Your Trail on Camp – Mint Today"
         </p>
