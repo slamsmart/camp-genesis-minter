@@ -247,7 +247,7 @@ export default function App() {
       setHasMoreTxs(true);
     }
     if (activePage !== "gallery") {
-      setNftsToShow(5);
+      setNftsToShow(6);
     }
   }, [activePage]);
 
