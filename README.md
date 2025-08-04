@@ -1,12 +1,66 @@
-# React + Vite
+# 🎕️ Camp Genesis Minter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> **"Start Your Trail on Camp – Mint Today"**
 
-Currently, two official plugins are available:
+**Camp Genesis Minter** is a lightweight, fully on-chain NFT minting dApp built for the [Camp Network](https://camp.network) (BaseCAMP Testnet), submitted for the **Wizz x Camp Builder Bounty**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🌟 What It Does
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* Connect wallet via **Origin SDK**
+* Upload image + input NFT name & creator name
+* Mint NFTs using **Wizz Camp NFT (WCNFT)** contract
+* View owned NFTs in a responsive gallery (with live metadata rendering)
+* See wallet transactions (fetched from Blockscout API)
+
+---
+
+## 🧠 How It Works
+
+* File is uploaded to **IPFS via Pinata**
+* Metadata JSON is generated and pinned
+* NFT is minted via `mint(to, tokenURI)` using your connected wallet
+* Gallery fetches NFT data via `tokenURI()` and displays image, name, and contract details
+
+---
+
+## 🖼️ NFT Gallery Behavior
+
+The gallery only supports **metadata-based NFTs**, i.e., NFTs with:
+
+* ✅ A proper `tokenURI` pointing to IPFS
+* ✅ Metadata JSON containing `image`, `name`, etc.
+
+> NFTs **must be minted via this app's form** to appear in the gallery.
+
+---
+
+## ⚙️ Tech Stack
+
+* **React + Vite + Tailwind**
+* **Origin SDK** for wallet connect
+* **Pinata** for IPFS storage
+* **ethers.js** for contract interaction
+* **Blockscout API** for real-time tx & NFT data
+
+---
+
+## 🚀 Live Demo
+
+👉 [https://camp-genesis-minter.vercel.app](https://camp-genesis-minter.vercel.app)
+
+---
+
+## 🔗 Smart Contract Info
+
+* **Name:** Wizz Camp NFT (WCNFT)
+* **Address:** `0x7648e0877AB3bcc71bA26797C993A409D404D264`
+* **Chain:** BaseCAMP Testnet (`20240901`)
+
+---
+
+## 🙌 Built by
+
+**SLAMSMART**
+No BS. Just on-chain minting that works.
