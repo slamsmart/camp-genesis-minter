@@ -252,7 +252,7 @@ export default function App() {
   }, [activePage]);
 
   const handleLoadMoreNfts = () => {
-    setNftsToShow(prev => prev + 5);
+    setNftsToShow(prev => prev + 6);
   };
   
 
