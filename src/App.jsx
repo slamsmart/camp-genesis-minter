@@ -346,7 +346,7 @@ export default function App() {
               </button>
             </div>
             {status && (
-              <p className="text-sm text-center text-green-700 font-medium">{status}</p>
+              <p className="text-sm text-center text-black font-medium">{status}</p>
             )}
           </div>
         )}
