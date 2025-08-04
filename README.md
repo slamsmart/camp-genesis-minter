@@ -59,6 +59,18 @@ The gallery only supports **metadata-based NFTs**, i.e., NFTs with:
 * **Chain:** BaseCAMP Testnet (`20240901`)
 
 ---
+🧭 Why This Matters
+In a sea of on-chain apps, Camp Genesis Minter is laser-focused:
+Just connect, create, and own your trail on-chain — no fluff.
+
+Built for creators who want simplicity, and for ecosystems that value real NFT infra.
+
+No dependency on centralized UI.
+No broken metadata.
+No excuses.
+
+This is what minting on Camp should feel like.
+Fast. Clean. Yours.
 
 ## 🙌 Built by
 
