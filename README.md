@@ -1,4 +1,4 @@
-# 🚀 CampGenesis Minter
+# 🚀 Camp Genesis Minter
 
 A minimalist, full-featured NFT minter for the [Camp Testnet](https://www.campnetwork.io), built with performance and flexibility in mind. Leverages Origin SDK for wallet integration and on-chain minting. Includes real-time gallery and transaction tracking.
 
