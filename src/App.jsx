@@ -55,6 +55,11 @@ export default function App() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [lastMintedTxHash, setLastMintedTxHash] = useState(null);
   const txsPerPage = 5;
+  
+  // Menghapus state terkait galeri
+  // const [nfts, setNfts] = useState([]);
+  // const [loadingNFT, setLoadingNFT] = useState(false);
+  // const [nftsToShow, setNftsToShow] = useState(5);
 
   const connectWallet = async () => {
     if (!window.ethereum) {
@@ -348,6 +353,65 @@ export default function App() {
           </div>
         )}
 
+        {activePage === "gallery" && (
+          <div className="w-full max-w-6xl bg-white/60 backdrop-blur p-6 rounded-xl shadow-md text-black">
+            <h2 className="text-xl font-bold mb-4">📸 NFT Gallery</h2>
+            {!wallet ? (
+              <p className="text-sm">🔌 Connect your wallet to view your NFTs.</p>
+            ) : (
+              <>
+                {loadingNFT ? (
+                  <p className="text-sm italic">Loading NFTs... (this may take a moment due to fetching metadata)</p>
+                ) : (
+                  nfts.length === 0 ? (
+                    <p>No NFTs found for this wallet.</p>
+                  ) : (
+                    <>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {nfts.slice(0, nftsToShow).map((nft, idx) => (
+                          <div key={idx} className="border p-4 rounded-lg bg-white/80">
+                            {nft.image && (
+                              <div className="relative w-full pb-[100%] rounded mb-2 overflow-hidden bg-gray-200">
+                                <img 
+                                  src={nft.image} 
+                                  alt="NFT" 
+                                  className="absolute inset-0 w-full h-full object-cover" 
+                                  loading="lazy" 
+                                />
+                              </div>
+                            )}
+                            <p className="font-semibold text-sm">🖼 Token: {nft.tokenName}</p>
+                            <p className="text-xs">🎨 ID: {nft.tokenID}</p>
+                            <p className="text-xs">📦 Contract: {nft.contractAddress.slice(0, 10)}...</p>
+                            <a
+                              href={`https://basecamp.cloud.blockscout.com/token/${nft.contractAddress}?a=${nft.tokenID}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 underline text-xs"
+                            >
+                              View on Explorer
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                      {nfts.length > nftsToShow && (
+                        <div className="mt-4 text-center">
+                          <button
+                            onClick={handleLoadMoreNfts}
+                            className="px-4 py-2 rounded-md text-sm text-white bg-blue-600 hover:bg-blue-700"
+                          >
+                            Load More
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )
+                )}
+              </>
+            )}
+          </div>
+        )}
+        
         {activePage === "transactions" && (
           <div className="w-full max-w-4xl bg-white/60 backdrop-blur p-6 rounded-xl shadow-md text-black">
             <h2 className="text-xl font-bold mb-4">📜 Transactions</h2>
@@ -361,7 +425,7 @@ export default function App() {
               <>
                 <ul className="space-y-2">
                   {txs.map((tx, idx) => (
-                    <li key={idx} className={`text-sm border-b pb-1 ${tx.hash === lastMintedTxHash ? 'bg-yellow-200 text-black p-2 rounded' : ''}`}>
+                    <li key={idx} className="text-sm border-b pb-1">
                       🔁 Hash: <a className="text-blue-600 underline" href={`https://basecamp.cloud.blockscout.com/tx/${tx.hash}`} target="_blank" rel="noreferrer">{tx.hash.slice(0, 12)}...</a>
                     </li>
                   ))}
@@ -369,7 +433,7 @@ export default function App() {
                 {hasMoreTxs && (
                   <div className="mt-4 text-center">
                     <button
-                      onClick={handleLoadMoreTxs}
+                      onClick={() => setCurrentPage(page => page + 1)}
                       disabled={loadingTx}
                       className={`px-4 py-2 rounded-md text-sm text-white transition ${
                         loadingTx ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
@@ -404,20 +468,22 @@ export default function App() {
           </div>
         )}
       </main>
-
-      {showClaimBadge && (
-        <ClaimBadge
-          wallet={wallet}
-          nftContractAddress={CA_ADDRESS}
-          badgeContractAddress={CA_ADDRESS}
-          onClose={() => setShowClaimBadge(false)}
-          onMintBadge={(tokenURI) => mintNFT(tokenURI)}
-        />
-      )}
-
+      
       <footer className="relative z-10 text-center py-4 text-sm text-white bg-black/60">
         &copy; {new Date().getFullYear()} Camp Genesis Minter. All rights reserved.
       </footer>
     </div>
   );
 }
+
+coba ganti import react-dom dengan ini. jadi 
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
