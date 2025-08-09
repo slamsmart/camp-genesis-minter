@@ -4,7 +4,7 @@ import { JsonRpcProvider } from "@ethersproject/providers";
 import { Contract, ethers } from "ethers";
 import ClaimBadge from "./ClaimBadge";
 import Leaderboard from "./Leaderboard";
-import CheckIn from "./CheckIn"; // ← HARUS di atas
+import CheckIn from "./CheckIn";
 
 // ABI yang diperbarui untuk mencakup fungsi safeMint dan fungsi view lainnya
 const ERC721ABI = [
@@ -67,6 +67,7 @@ export default function App() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [lastMintedTxHash, setLastMintedTxHash] = useState(null);
   const [lastMintedNft, setLastMintedNft] = useState(null);
+
   const nftPreviewLimit = 3;
   const txsPreviewLimit = 3;
 
@@ -120,12 +121,14 @@ export default function App() {
       const data = await response.json();
       const fileUrl = `https://gateway.pinata.cloud/ipfs/${data.IpfsHash}`;
       setStatus(`✅ File uploaded to IPFS: ${fileUrl}`);
+
       const metadata = {
         name: nftName,
         description: `An NFT by ${creatorName}`,
         image: fileUrl,
         attributes: [{ trait_type: "Creator", value: creatorName }],
       };
+
       const metadataResponse = await fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
         method: "POST",
         headers: {
@@ -135,10 +138,12 @@ export default function App() {
         },
         body: JSON.stringify(metadata),
       });
+
       if (!metadataResponse.ok) {
         const errorText = await metadataResponse.text();
         throw new Error(`Pinata metadata upload failed: ${metadataResponse.status} - ${errorText}`);
       }
+
       const metadataData = await metadataResponse.json();
       const metadataUrl = `https://gateway.pinata.cloud/ipfs/${metadataData.IpfsHash}`;
       setStatus(`✅ Metadata uploaded to IPFS: ${metadataUrl}`);
@@ -170,6 +175,7 @@ export default function App() {
         return;
       }
       setStatus(`✅ Metadata created: ${tokenURI}. Please confirm the transaction in your wallet.`);
+
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(CA_ADDRESS, ERC721ABI, signer);
@@ -178,6 +184,7 @@ export default function App() {
       await transaction.wait();
       setStatus(`🎉 NFT minted! Check out your new NFT below.`);
       setLastMintedTxHash(transaction.hash);
+
       const metaResponse = await fetch(ipfsToHttp(tokenURI));
       const metaData = await metaResponse.json();
       setLastMintedNft({
@@ -251,11 +258,8 @@ export default function App() {
               <div onClick={() => { setActivePage("checkIn"); setShowMenu(false); }} className="cursor-pointer hover:bg-gray-200 p-1 rounded">
                 🏠 Check In
               </div>
-               <div onClick={() => { setActivePage("claim"); setShowMenu(false); }} className="cursor-pointer hover:bg-gray-200 p-1 rounded">
+              <div onClick={() => { setActivePage("claim"); setShowMenu(false); }} className="cursor-pointer hover:bg-gray-200 p-1 rounded">
                 🏆 Claim Badge
-              </div>
-               <div onClick={() => { setActivePage("my-collection"); setShowMenu(false); }} className="cursor-pointer hover:bg-gray-200 p-1 rounded">
-                🖼️ My Collection
               </div>
               <div onClick={() => { setActivePage("transactions"); setShowMenu(false); }} className="cursor-pointer hover:bg-gray-200 p-1 rounded">
                 📜 Transactions
@@ -364,15 +368,10 @@ export default function App() {
             badgeCIDs={BADGE_CIDS}
           />
         )}
-        {wallet &&activePage === "my-collection" && (
-       <MyCollection wallet={wallet} />
-      )}
         {activePage === "leaderboard" && (
           <Leaderboard />
         )}
-
         {activePage === "checkIn" && <CheckIn wallet={wallet} />}
-
         {activePage === "transactions" && (
           <div className="w-full max-w-6xl bg-white/60 backdrop-blur p-4 sm:p-6 rounded-xl shadow-md text-black">
             <h2 className="text-xl font-bold mb-4">📜 Recent Transactions</h2>
