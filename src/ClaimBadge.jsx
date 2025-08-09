@@ -23,11 +23,11 @@ const badgeEligibility = {
 
 // Daftar CID IPFS untuk setiap badge
 const BADGE_CIDS = {
-  "Bronze Badge": "bafkreie46vvx5hbznsqsnbxmzq6jbvtjbe6bvyjwdobxfbxniyemg5t2w4",
-  "Silver Badge": "bafkreigq5hjcu5gp6roze7elsxxps4c5xndymohrtzteua7osp5m4olqzq",
-  "Gold Badge": "bafkreia35spnm2ztymftss37ddvnzufqlrejxcsloaoqaenhd7zjgxfiue",
-  "Platinum Badge": "bafkreif2pgkafeua7otq6fohialgaxzdknerokgfu2nhel7yu5q4dxdv3a",
-  "Diamond Badge": "bafkreia6q3egtsmh7vtwpp5vgig4oucsrw62xccohfu47ofxmn6j2fkn5y",
+  "Bronze Badge": "bafkreidtangvsork5ghyxv6sutxojuebimwxq7uz3jfi27y5hu7qa73zau",
+  "Silver Badge": "bafkreiat4g4ir7ii5hkww4rhmmcnvdjddhetytxmak2yfxp6lbdqinmg64",
+  "Gold Badge": "bafkreicwnzrwsx5cxkl2jgpclpmwqacranxuh6ppsclzpy2nyen5q7v5ea",
+  "Platinum Badge": "bafkreigbj6c2bt3rnyk34lhzbvn36l2coqjzl7vgdvgdedmoavgbrsdx3q",
+  "Diamond Badge": "bafkreihczfnkcejhmd5lpaerke75efet3ndplg73dkbwbaqhhzyohcslji",
 };
 
 export default function ClaimBadge({ wallet, nftContractAddress, badgeContractAddress, onClose, onMintBadge }) {
@@ -116,7 +116,7 @@ export default function ClaimBadge({ wallet, nftContractAddress, badgeContractAd
 
   const getLocalImage = (badge) => {
     const key = badge.split(" ")[0].toLowerCase();
-    return `/badges/${key}.png`;
+    return `/${key}.png`;
   };
 
   return (
@@ -189,7 +189,7 @@ export default function ClaimBadge({ wallet, nftContractAddress, badgeContractAd
             💎 Platinum Badge — ≥ 50 NFTs<br />
             🔶 Diamond Badge — ≥ 100 NFTs<br />
             <br />
-            <strong>⚠️ You can only claim each badge once.</strong>.
+            <strong>⚠️ You can claim another badge.</strong>.
           </div>
         </div>
       ) : (
