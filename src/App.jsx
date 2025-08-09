@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useAuth, CampModal } from "@campnetwork/origin/react";
-import { JsonRpcProvider } from "@ethersproject/providers";
-import { Contract, ethers } from "ethers";
+import { ethers } from "ethers";
 import ClaimBadge from "./ClaimBadge";
 import Leaderboard from "./Leaderboard";
 import CheckIn from "./CheckIn";
+import MyCollection from "./MyCollection";
+import MyTransactions from "./MyTransactions"; // Import the MyTransactions component
 
-// ABI yang diperbarui untuk mencakup fungsi safeMint dan fungsi view lainnya
+// ABI and other constants remain the same
 const ERC721ABI = [
   "function safeMint(address to, string memory tokenURI) public",
   "function tokenURI(uint256 tokenId) view returns (string)",
@@ -18,10 +19,8 @@ const ERC721ABI = [
   "function tokenOfOwnerByIndex(address owner, uint256 index) view returns (uint256)"
 ];
 
-// Alamat kontrak WIZZCAMP
 const CA_ADDRESS = "0xC562c59452c2C721d22353dE428Ec211C4069f60";
 
-// Daftar CID IPFS untuk setiap badge
 const BADGE_CIDS = {
   "Bronze Badge": "bafkreie46vvx5hbznsqsnbxmzq6jbvtjbe6bvyjwdobxfbxniyemg5t2w4",
   "Silver Badge": "bafkreigq5hjcu5gp6roze7elsxxps4c5xndymohrtzteua7osp5m4olqzq",
@@ -30,7 +29,6 @@ const BADGE_CIDS = {
   "Diamond Badge": "bafkreia6q3egtsmh7vtwpp5vgig4oucsrw62xccohfu47ofxmn6j2fkn5y",
 };
 
-// Komponen Spinner Loading
 const LoadingSpinner = () => (
   <div className="flex flex-col items-center justify-center p-8 text-black">
     <svg className="animate-spin h-10 w-10 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -41,7 +39,6 @@ const LoadingSpinner = () => (
   </div>
 );
 
-// Helper function untuk konversi URI IPFS
 const ipfsToHttp = (uri) => {
   if (!uri) return null;
   const ipfsPrefix = "ipfs://";
@@ -60,16 +57,10 @@ export default function App() {
   const [status, setStatus] = useState("");
   const [showMenu, setShowMenu] = useState(false);
   const [activePage, setActivePage] = useState("home");
-  const [txs, setTxs] = useState([]);
-  const [addressToCheck, setAddressToCheck] = useState("");
-  const [loadingTx, setLoadingTx] = useState(false);
   const [loadingMint, setLoadingMint] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [lastMintedTxHash, setLastMintedTxHash] = useState(null);
   const [lastMintedNft, setLastMintedNft] = useState(null);
-
-  const nftPreviewLimit = 3;
-  const txsPreviewLimit = 3;
 
   const connectWallet = async () => {
     if (!window.ethereum) {
@@ -79,9 +70,7 @@ export default function App() {
     try {
       const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
       setWallet(accounts[0]);
-      setAddressToCheck(accounts[0]);
       setStatus("✅ Wallet connected!");
-      setTxs([]);
     } catch {
       setStatus("❌ Wallet connection failed.");
     }
@@ -121,14 +110,12 @@ export default function App() {
       const data = await response.json();
       const fileUrl = `https://gateway.pinata.cloud/ipfs/${data.IpfsHash}`;
       setStatus(`✅ File uploaded to IPFS: ${fileUrl}`);
-
       const metadata = {
         name: nftName,
         description: `An NFT by ${creatorName}`,
         image: fileUrl,
         attributes: [{ trait_type: "Creator", value: creatorName }],
       };
-
       const metadataResponse = await fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
         method: "POST",
         headers: {
@@ -138,12 +125,10 @@ export default function App() {
         },
         body: JSON.stringify(metadata),
       });
-
       if (!metadataResponse.ok) {
         const errorText = await metadataResponse.text();
         throw new Error(`Pinata metadata upload failed: ${metadataResponse.status} - ${errorText}`);
       }
-
       const metadataData = await metadataResponse.json();
       const metadataUrl = `https://gateway.pinata.cloud/ipfs/${metadataData.IpfsHash}`;
       setStatus(`✅ Metadata uploaded to IPFS: ${metadataUrl}`);
@@ -175,7 +160,6 @@ export default function App() {
         return;
       }
       setStatus(`✅ Metadata created: ${tokenURI}. Please confirm the transaction in your wallet.`);
-
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(CA_ADDRESS, ERC721ABI, signer);
@@ -184,7 +168,6 @@ export default function App() {
       await transaction.wait();
       setStatus(`🎉 NFT minted! Check out your new NFT below.`);
       setLastMintedTxHash(transaction.hash);
-
       const metaResponse = await fetch(ipfsToHttp(tokenURI));
       const metaData = await metaResponse.json();
       setLastMintedNft({
@@ -211,37 +194,6 @@ export default function App() {
     setLastMintedTxHash(null);
   };
 
-  useEffect(() => {
-    const fetchTxs = async () => {
-      if (!addressToCheck || activePage !== "transactions") {
-        return;
-      }
-      setLoadingTx(true);
-      try {
-        const res = await fetch(`https://basecamp.cloud.blockscout.com/api?module=account&action=txlist&address=${addressToCheck}&sort=desc&limit=${txsPreviewLimit}`);
-        const data = await res.json();
-        if (data.status === "1" && data.result) {
-          setTxs(data.result);
-        } else {
-          setTxs([]);
-          console.error("Failed to fetch transactions:", data.message);
-        }
-      } catch (err) {
-        setTxs([]);
-        console.error("Fetch error:", err);
-      } finally {
-        setLoadingTx(false);
-      }
-    };
-    fetchTxs();
-  }, [addressToCheck, activePage, txsPreviewLimit]);
-
-  useEffect(() => {
-    if (activePage !== "transactions") {
-      setTxs([]);
-    }
-  }, [activePage]);
-
   return (
     <div className="relative min-h-screen w-full flex flex-col justify-start gap-10 bg-camp bg-cover bg-center bg-no-repeat font-sans">
       <div className="absolute inset-0 bg-black/30 z-0" />
@@ -261,11 +213,14 @@ export default function App() {
               <div onClick={() => { setActivePage("claim"); setShowMenu(false); }} className="cursor-pointer hover:bg-gray-200 p-1 rounded">
                 🏆 Claim Badge
               </div>
-              <div onClick={() => { setActivePage("transactions"); setShowMenu(false); }} className="cursor-pointer hover:bg-gray-200 p-1 rounded">
-                📜 Transactions
+              <div onClick={() => { setActivePage("mytransactions"); setShowMenu(false); }} className="cursor-pointer hover:bg-gray-200 p-1 rounded">
+                📜 My Transactions
               </div>
               <div onClick={() => { setActivePage("leaderboard"); setShowMenu(false); }} className="cursor-pointer hover:bg-gray-200 p-1 rounded">
                 🏅 Leaderboard
+              </div>
+              <div onClick={() => { setActivePage("mycollection"); setShowMenu(false); }} className="cursor-pointer hover:bg-gray-200 p-1 rounded">
+                🖼️ My Collection
               </div>
               <div onClick={() => { setActivePage("about"); setShowMenu(false); }} className="cursor-pointer hover:bg-gray-200 p-1 rounded">
                 ℹ️ About
@@ -368,70 +323,10 @@ export default function App() {
             badgeCIDs={BADGE_CIDS}
           />
         )}
-        {activePage === "leaderboard" && (
-          <Leaderboard />
-        )}
+        {activePage === "leaderboard" && <Leaderboard />}
         {activePage === "checkIn" && <CheckIn wallet={wallet} />}
-        {activePage === "transactions" && (
-          <div className="w-full max-w-6xl bg-white/60 backdrop-blur p-4 sm:p-6 rounded-xl shadow-md text-black">
-            <h2 className="text-xl font-bold mb-4">📜 Recent Transactions</h2>
-            {!addressToCheck ? (
-              <p className="text-sm">🔌 Connect your wallet to view your transactions.</p>
-            ) : (
-              <>
-                {loadingTx ? (
-                  <div className="flex justify-center items-center h-40">
-                    <LoadingSpinner />
-                  </div>
-                ) : txs.length === 0 ? (
-                  <p>No transactions found for this wallet.</p>
-                ) : (
-                  <>
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full table-auto">
-                        <thead>
-                          <tr className="bg-gray-200">
-                            <th className="px-4 py-2 text-left text-sm font-semibold">Hash</th>
-                            <th className="px-4 py-2 text-left text-sm font-semibold">Type</th>
-                            <th className="px-4 py-2 text-left text-sm font-semibold">From</th>
-                            <th className="px-4 py-2 text-left text-sm font-semibold">To</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {txs.map((tx, idx) => (
-                            <tr key={idx} className="border-b border-gray-300">
-                              <td className="px-4 py-2 text-xs">
-                                <a href={`https://basecamp.cloud.blockscout.com/tx/${tx.hash}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                                  {tx.hash.slice(0, 8)}...
-                                </a>
-                              </td>
-                              <td className="px-4 py-2 text-xs">{tx.input === "0x" ? "Transfer" : "Contract Call"}</td>
-                              <td className="px-4 py-2 text-xs">
-                                <a href={`https://basecamp.cloud.blockscout.com/address/${tx.from}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                                  {tx.from.slice(0, 8)}...
-                                </a>
-                              </td>
-                              <td className="px-4 py-2 text-xs">
-                                <a href={`https://basecamp.cloud.blockscout.com/address/${tx.to}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                                  {tx.to.slice(0, 8)}...
-                                </a>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className="mt-4 text-center">
-                      <a href={`https://basecamp.cloud.blockscout.com/address/${addressToCheck}`} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-md text-sm text-white transition bg-blue-600 hover:bg-blue-700">
-                        View All Transactions on BlockScout
-                      </a>
-                    </div>
-                  </>
-                )}
-              </>
-            )}
-          </div>
-        )}
+        {activePage === "mycollection" && <MyCollection userAddress={wallet} />}
+        {activePage === "mytransactions" && <MyTransactions userAddress={wallet} />}
         {activePage === "about" && (
           <div className="w-full max-w-3xl bg-white/80 text-black backdrop-blur p-4 sm:p-6 rounded-xl shadow-md">
             <h2 className="text-xl font-bold mb-4">ℹ️ About Camp Genesis Minter</h2>
