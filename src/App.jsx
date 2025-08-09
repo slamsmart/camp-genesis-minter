@@ -21,7 +21,6 @@ const ERC721ABI = [
 ];
 const CA_ADDRESS = "0xC562c59452c2C721d22353dE428Ec211C4069f60";
 const BLOCKSCOUT_BASE = "https://basecamp.cloud.blockscout.com";
-
 const BADGE_CIDS = {
   "Bronze Badge": "bafkreie46vvx5hbznsqsnbxmzq6jbvtjbe6bvyjwdobxfbxniyemg5t2w4",
   "Silver Badge": "bafkreigq5hjcu5gp6roze7elsxxps4c5xndymohrtzteua7osp5m4olqzq",
@@ -29,8 +28,6 @@ const BADGE_CIDS = {
   "Platinum Badge": "bafkreif2pgkafeua7otq6fohialgaxzdknerokgfu2nhel7yu5q4dxdv3a",
   "Diamond Badge": "bafkreia6q3egtsmh7vtwpp5vgig4oucsrw62xccohfu47ofxmn6j2fkn5y",
 };
-
-// PNG lokal di folder public/
 const THEME_IMAGES = {
   light: "/bg-light.png",
   dark: "/bg-dark.png",
@@ -90,7 +87,7 @@ const LoadingSpinner = () => (
 
 /* ===================== APP ===================== */
 export default function App() {
-  const { origin } = useAuth(); // keep if needed later
+  const { origin } = useAuth();
   const [wallet, setWallet] = useState("");
   const [nftName, setNftName] = useState("");
   const [creatorName, setCreatorName] = useState("");
@@ -103,7 +100,6 @@ export default function App() {
   const [lastMintedTxHash, setLastMintedTxHash] = useState(null);
   const [lastMintedNft, setLastMintedNft] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
-
   const menuRef = useRef(null);
 
   /* ===== Theme bootstrapping ===== */
@@ -138,7 +134,6 @@ export default function App() {
     if (!window.ethereum) return;
     const onAccounts = (accs) => setWallet(accs?.[0] ?? "");
     const onChainChanged = () => window.location.reload();
-
     window.ethereum.on?.("accountsChanged", onAccounts);
     window.ethereum.on?.("chainChanged", onChainChanged);
     return () => {
@@ -211,16 +206,13 @@ export default function App() {
     setStatus("⏳ Uploading file to IPFS...");
     const API_KEY = import.meta.env.VITE_PINATA_KEY;
     const API_SECRET = import.meta.env.VITE_PINATA_SECRET;
-
     if (!API_KEY || !API_SECRET) {
       throw new Error(
         "Pinata API keys missing. Set VITE_PINATA_KEY & VITE_PINATA_SECRET"
       );
     }
-
     const formData = new FormData();
     formData.append("file", file);
-
     const fileRes = await fetch(
       "https://api.pinata.cloud/pinning/pinFileToIPFS",
       {
@@ -238,7 +230,6 @@ export default function App() {
     }
     const fileJson = await fileRes.json();
     const fileUrl = `ipfs://${fileJson.IpfsHash}`;
-
     // metadata
     const metadata = {
       name: nftName,
@@ -246,7 +237,6 @@ export default function App() {
       image: fileUrl,
       attributes: [{ trait_type: "Creator", value: creatorName }],
     };
-
     setStatus("⏳ Uploading metadata to IPFS...");
     const metaRes = await fetch(
       "https://api.pinata.cloud/pinning/pinJSONToIPFS",
@@ -302,21 +292,16 @@ export default function App() {
       setStatus("❌ Contract not ready.");
       return;
     }
-
     setLoadingMint(true);
     setStatus("⏳ Preparing to mint...");
-
     try {
       const tokenURI = tokenURIOverride || (await uploadToIPFS(file));
       setStatus(`✅ Metadata ready. Confirm the transaction...`);
-
       const tx = await contract.safeMint(wallet, tokenURI);
       setStatus(`⏳ Transaction sent. Waiting confirmation… Tx: ${tx.hash}`);
       await tx.wait(1);
-
       setLastMintedTxHash(tx.hash);
       setStatus(`🎉 NFT minted!`);
-
       const meta = await fetchJsonWithFallback(ipfsToHttp(tokenURI));
       const imageUrls = ipfsToHttp(meta.image);
       setLastMintedNft({
@@ -347,7 +332,6 @@ export default function App() {
 
   /* ===================== UI ===================== */
   return (
-    // NO bg-white/bg-gray-900 on parent; background handled by image layer
     <div
       className={`relative min-h-screen w-full flex flex-col justify-start gap-10 font-sans ${
         darkMode ? "dark text-white" : "text-black"
@@ -355,15 +339,15 @@ export default function App() {
     >
       {/* Background image layer */}
       <div
-        className="absolute inset-0 z-0 bg-center bg-cover bg-no-repeat"
+        className="absolute inset-0 -z-10 bg-center bg-cover bg-no-repeat pointer-events-none"
         style={{ backgroundImage: `url(${currentHero})` }}
         aria-hidden="true"
       />
       {/* Overlay for readability */}
-      <div className="absolute inset-0 z-10 bg-black/30 pointer-events-none" />
+      <div className="absolute inset-0 bg-black/30 pointer-events-none" />
 
       {/* All content */}
-      <div className="relative z-20">
+      <div className="relative z-30">
         {/* Top Bar */}
         <div className="flex justify-between items-center p-4">
           <div className="flex items-center gap-4" ref={menuRef}>
@@ -375,9 +359,8 @@ export default function App() {
             >
               ☰ Menu
             </button>
-
             {showMenu && (
-              <div className="absolute top-16 left-4 mt-2 bg-white dark:bg-gray-700 text-black dark:text-white rounded shadow-md p-3 space-y-2">
+              <div className="absolute top-16 left-4 mt-2 bg-white dark:bg-gray-700 text-black dark:text-white rounded shadow-md p-3 space-y-2 z-50">
                 {[
                   ["home", "🏠 Home"],
                   ["checkIn", "📍 Check In"],
@@ -406,7 +389,6 @@ export default function App() {
               </div>
             )}
           </div>
-
           <div className="flex items-center gap-2">
             <button
               onClick={toggleTheme}
@@ -416,18 +398,15 @@ export default function App() {
             >
               {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
             </button>
-
             <button
               onClick={() => setActivePage("claim")}
               className="bg-yellow-500 hover:bg-yellow-600 text-black dark:text-white px-4 py-2 rounded-md shadow-md text-sm sm:text-base transition-colors duration-200"
             >
               🏆 Claim Badge
             </button>
-
             <CampModal />
           </div>
         </div>
-
         {/* Header */}
         <header className="text-white text-center pt-24 pb-10 px-4">
           <h1 className="text-4xl sm:text-6xl font-grotesk font-bold text-white drop-shadow-[0_0_9px_black] mb-2">
@@ -436,7 +415,6 @@ export default function App() {
           <p className="text-xl sm:text-2xl font-inter font-bold text-white drop-shadow-[0_0_15px_black] mb-4">
             "Start Your Trail on Camp – Mint Today"
           </p>
-
           {!wallet ? (
             <button
               onClick={connectWallet}
@@ -450,7 +428,6 @@ export default function App() {
             </p>
           )}
         </header>
-
         {/* Main */}
         <main className="flex-1 flex flex-col items-center justify-start px-4 sm:px-6">
           {activePage === "home" && (
@@ -501,7 +478,6 @@ export default function App() {
                       />
                     </div>
                   )}
-
                   <div className="flex flex-col items-center justify-center gap-4 w-full">
                     <div className="w-full flex flex-col sm:flex-row sm:gap-4 gap-2 justify-center items-center">
                       <input
@@ -519,7 +495,6 @@ export default function App() {
                         className="w-full px-4 py-3 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                       />
                     </div>
-
                     <div className="w-full flex flex-col sm:flex-row sm:gap-4 gap-2 justify-center items-center">
                       <label
                         htmlFor="file-upload"
@@ -539,7 +514,6 @@ export default function App() {
                         onChange={handleFileChange}
                         className="hidden"
                       />
-
                       <button
                         onClick={() => mintNFT()}
                         disabled={
@@ -565,7 +539,6 @@ export default function App() {
                   </div>
                 </div>
               )}
-
               {status && (
                 <div className="text-center px-4">
                   {status.startsWith("🎉") ? (
@@ -585,7 +558,6 @@ export default function App() {
               )}
             </div>
           )}
-
           {activePage === "claim" && (
             <ClaimBadge
               wallet={wallet}
@@ -596,34 +568,47 @@ export default function App() {
               badgeCIDs={BADGE_CIDS}
             />
           )}
-
           {activePage === "leaderboard" && <Leaderboard />}
-
           {activePage === "checkIn" && <CheckIn wallet={wallet} />}
-
           {activePage === "mycollection" && (
             <MyCollection userAddress={wallet} />
           )}
-
           {activePage === "mytransactions" && (
             <MyTransactions userAddress={wallet} />
           )}
-
-          {activePage === "about" && (
-            <div className="w-full max-w-3xl bg-white/80 dark:bg-gray-800/80 text-black dark:text-white backdrop-blur p-4 sm:p-6 rounded-xl shadow-md">
-              <h2 className="text-xl font-bold mb-4">
-                ℹ️ About Camp Genesis Minter
-              </h2>
-              <p className="text-sm leading-relaxed">
-                <strong>Camp Genesis Minter</strong> is a lightweight NFT
-                minting dApp for the Camp Network (BaseCAMP Testnet). Built with
-                Origin SDK, React, Vite, and Tailwind. Blockscout powers the
-                explorers and gallery.
-              </p>
-            </div>
+        {activePage === "about" && (
+          <div className="w-full max-w-3xl bg-white/80 text-black backdrop-blur p-4 sm:p-6 rounded-xl shadow-md">
+            <h2 className="text-xl font-bold mb-4">ℹ️ About Camp Genesis Minter</h2>
+            <p className="text-sm leading-relaxed">
+              <strong>Camp Genesis Minter</strong> is a lightweight NFT minting dApp built by{" "}
+              <a href="https://x.com/slamsmart" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
+                <strong>slamsmart</strong>
+              </a>{" "}
+              present for{" "}
+              <a href="https://x.com/WizzHQ" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
+                <strong>Wizz</strong>
+              </a>{" "}
+              and{" "}
+              <a href="https://x.com/campnetworkxyz" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
+                <strong>Camp Network</strong>
+              </a>{" "}
+              Builder Bounty contest.<br /><br />
+              This project aims to provide a seamless and fully on-chain experience for minting, tracking, and showcasing NFTs on the Camp Network (BaseCAMP Testnet).<br /><br />
+              Built with:
+              <ul className="list-disc ml-5 mt-1">
+                <li>🛠 Origin SDK for wallet interaction and NFT minting</li>
+                <li>🧩 React + Vite + Tailwind for UI</li>
+                <li>🛰 BlockScout API integration for real-time transaction & NFT gallery fetch</li>
+                <li> And all other features that we have developed together!</li>
+              </ul>
+              <br />
+              The mission is simple:<br />
+              <em><q>Empower builders. Inspire creativity. On-chain. Forever.</q></em><br /><br />
+              We hope this tool benefits the community and serves as inspiration for future Camp Network applications. Feel free to use, fork, and expand it!
+            </p>
+          </div>
           )}
         </main>
-
         <footer className="text-center py-4 text-sm text-white bg-black/60 dark:bg-gray-800">
           &copy; {new Date().getFullYear()} Camp Genesis Minter. All rights reserved.
         </footer>
