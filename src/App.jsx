@@ -398,12 +398,13 @@ export default function App() {
             >
               {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
             </button>
-            <button
-              onClick={() => setActivePage("claim")}
-              className="bg-yellow-500 hover:bg-yellow-600 text-black dark:text-white px-4 py-2 rounded-md shadow-md text-sm sm:text-base transition-colors duration-200"
-            >
-              🏆 Claim Badge
-            </button>
+           <button
+  onClick={() => setActivePage("claim")}
+  className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-2 rounded-md shadow-md text-sm sm:text-base transition-colors duration-200"
+>
+  🏆 Claim Badge
+</button>
+
             <CampModal />
           </div>
         </div>
@@ -602,9 +603,9 @@ export default function App() {
                 <li> And all other features that we have developed together!</li>
               </ul>
               <br />
-              The mission is simple:<br />
-              <em><q>Empower builders. Inspire creativity. On-chain. Forever.</q></em><br /><br />
-              We hope this tool benefits the community and serves as inspiration for future Camp Network applications. Feel free to use, fork, and expand it!
+The mission is simple:<br />
+<em><q><strong>Empower builders. Inspire creativity. On-chain. Forever.</strong></q></em><br /><br />
+              We hope this tool benefits the community and serves as inspiration for future Camp Network applications. Feel free to use, fork, and expand it!<strong></strong>
             </p>
           </div>
           )}
