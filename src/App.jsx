@@ -610,9 +610,9 @@ The mission is simple:<br />
           </div>
           )}
         </main>
-        <footer className="fixed bottom-0 left-0 w-full text-center py-4 text-sm text-white bg-black/60 dark:bg-gray-800">
-  &copy; {new Date().getFullYear()} Camp Genesis Minter. All rights reserved.
-</footer>
+        <footer className="text-center py-4 text-sm text-white bg-black/60 dark:bg-gray-800">
+          &copy; {new Date().getFullYear()} Camp Genesis Minter. All rights reserved.
+        </footer>
       </div>
     </div>
   );
