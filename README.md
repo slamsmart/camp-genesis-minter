@@ -1,9 +1,8 @@
-# 🚀 Camp Genesis Minter
+**Camp Genesis Minter** is a **high-performance, production-ready NFT minter** for the [Camp Testnet]
+**powered by Origin SDK** for seamless wallet integration and **BaseCAMP smart contracts** for real on-chain minting.
+Built for **speed, reliability, and user experience**, it delivers a complete NFT creation pipeline — from image upload to IPFS, automatic metadata generation, and instant minting on the Camp blockchain.
 
-**Camp Genesis Minter** is a **high-performance, production-ready NFT minter** for the [Camp Testnet]  
-Built for **speed, reliability, and user experience**, it integrates **Origin SDK** for wallet connection and on-chain minting, with full **IPFS storage**, real-time feedback, and a responsive UI.
-
-> **Not a prototype.** This is **live, on-chain NFT minting** — deployable and usable right now.
+> **Not a prototype.** This is **live, on-chain NFT minting** using **Origin SDK + BaseCAMP smart contract**.
 
 ---
 
@@ -65,7 +64,6 @@ This isn’t a demo with fake transactions — it’s the real deal:
 - **Automatic refresh** after minting
 - Filter NFTs by wallet address
 - Show image, name, token ID, and metadata
-- Powered by [Camp Collector](https://camp-collector.vercel.app/)
 
 ---
 
