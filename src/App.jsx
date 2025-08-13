@@ -410,10 +410,11 @@ export default function App() {
         </div>
         {/* Header */}
         <header className="text-white text-center pt-24 pb-10 px-4">
-          <h1 className="text-4xl sm:text-6xl font-grotesk font-bold text-white drop-shadow-[0_0_9px_black] mb-2">
-            Camp Genesis Minter
-          </h1>
-          <p className="text-xl sm:text-2xl font-inter font-bold text-white drop-shadow-[0_0_15px_black] mb-4">
+          <h1 class="text-8xl font-extrabold bg-gradient-to-r from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent drop-shadow-lg">
+  Camp Genesis Minter
+</h1>
+
+          <p className="text-xl sm:text-3xl font-inter font-bold text-white drop-shadow-[0_0_15px_black] mb-4">
             "Start Your Trail on Camp – Mint Today"
           </p>
           {!wallet ? (
