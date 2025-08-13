@@ -1,132 +1,126 @@
 # 🚀 Camp Genesis Minter
 
-A minimalist, full-featured NFT minter for the [Camp Testnet](https://www.campnetwork.io), built with performance and flexibility in mind. Leverages Origin SDK for wallet integration and on-chain minting. Includes real-time gallery and transaction tracking.
+**Camp Genesis Minter** is a **high-performance, production-ready NFT minter** for the [Camp Testnet]  
+Built for **speed, reliability, and user experience**, it integrates **Origin SDK** for wallet connection and on-chain minting, with full **IPFS storage**, real-time feedback, and a responsive UI.
 
-> **This is not a demo. This is real on-chain NFT minting.**
+> **Not a prototype.** This is **live, on-chain NFT minting** — deployable and usable right now.
 
 ---
 
-## ✅ Core Features
+## 🎯 Why It Stands Out
 
-### 🔥 Full On-Chain Minting Pipeline
-- Upload image to IPFS via **Pinata**
+This isn’t a demo with fake transactions — it’s the real deal:
+- **Full Minting Pipeline**: Image → IPFS → Metadata → Smart Contract → Wallet
+- **Instant Feedback**: Live status, no page reloads
+- **Mobile & Desktop**: Fully responsive
+- **Zero Fluff**: Purpose-built for creators & collectors
+
+---
+
+## ✨ Features at a Glance
+
+![Features at a Glance] 
+
+| Feature                  | What It Delivers                              |
+|--------------------------|-----------------------------------------------|
+| **On-Chain Minting**     | Full minting pipeline on **BaseCAMP Testnet** |
+| **Real-Time Feedback**   | Live mint status + automatic gallery refresh  |
+| **NFT Preview**          | View image & JSON metadata before mint        |
+| **Transaction Tracker**  | See recent mints & verify TX on BlockScout    |
+
+---
+
+## ✅ Core Capabilities
+
+### 🔗 End-to-End On-Chain Minting
+- Upload images to **IPFS** via **Pinata**
 - Auto-generate metadata JSON (name, creator, image CID)
-- Mint NFTs using deployed smart contract on **BaseCAMP Testnet**
-- Supports **WalletConnect**
+- Mint NFTs using **WizzCamp** smart contract on **BaseCAMP Testnet**
+- Wallet integration with **Origin SDK** + **WalletConnect**
 
 ---
 
 ### ⚡ Real-Time UX Feedback
-- Visual minting **spinner**
-- Status indicators: `Minting`, `Success`, `Failed`
-- Disable buttons during TX → no double mint
-- **“Mint Another NFT”** = loop minting without reload
+- Minting spinner + status badges: `Minting`, `Success`, `Failed`
+- Buttons auto-disable during transactions to prevent duplicate mints
+- “**Mint Another NFT**” without reloading
 
 ---
 
-### 👁 NFT Preview Before Mint
-- Show uploaded image before committing
-- Display structured JSON metadata (name, image, description)
-- Verifies IPFS CID is valid before mint
+### 👁 NFT Pre-Mint Validation
+- Instant image preview
+- Metadata JSON view before mint
+- IPFS CID check before sending TX
 
 ---
 
-### ✅ Mint Result Display
-- Show NFT image + metadata after minting
-- Show TX hash, contract address, and **BlockScout link**
-- Clear UI status: green for success, red for failure
+### 🏆 Post-Mint Results
+- Display NFT image + metadata immediately
+- Show transaction hash, contract address, and **BlockScout link**
+- Color-coded success/failure messages
 
 ---
 
-## 🖼 NFT Gallery (via [Camp Collector](https://camp-collector.vercel.app/))
-- View all NFTs minted by wallet
-- Show image, name, metadata, and token ID
-- Filter by wallet address
+## 🖼 NFT Gallery
+- **Automatic refresh** after minting
+- Filter NFTs by wallet address
+- Show image, name, token ID, and metadata
+- Powered by [Camp Collector](https://camp-collector.vercel.app/)
 
 ---
 
 ## 📜 Transaction Tracker
-- View latest minting TXs
-- Fetches live from BlockScout explorer
-- Clickable TX links with real status
-
----
-
-## 💡 Why CampGenesis Wins
-
-- ✅ Full IPFS + Smart Contract + Wallet integration
-- ✅ Uses **WizzCamp** contract on Camp testnet — real minting
-- ✅ Origin SDK & WalletConnect ready
-- ✅ Works on **mobile & desktop**
-- ✅ Zero gimmicks — it actually mints NFTs on-chain
+- Pulls live data from **BlockScout API**
+- Clickable transaction links for proof
+- Real-time status updates
 
 ---
 
 ## 🛠 Tech Stack
 
-| Layer         | Tech                            |
-|---------------|----------------------------------|
-| Frontend      | React + Vite + Tailwind CSS     |
-| Blockchain    | Camp Network (BaseCAMP testnet) |
-| Wallet        | Origin SDK + ethers.js          |
-| Storage       | Pinata (IPFS image & metadata)  |
-| Explorer      | BlockScout API                  |
+| Layer         | Tech                                |
+|---------------|-------------------------------------|
+| Frontend      | React + Vite + Tailwind CSS         |
+| Blockchain    | Camp Network (BaseCAMP Testnet)     |
+| Wallet        | Origin SDK + ethers.js + WalletConnect |
+| Storage       | Pinata (IPFS for images & metadata) |
+| Explorer      | BlockScout API                      |
 
 ---
 
-## 📦 Getting Started
+## 🚀 Getting Started
 
 ```bash
 git clone https://github.com/yourusername/campgenesis-minter.git
 cd campgenesis-minter
 npm install
 npm run dev
-```
 
-> ⚠️ Ensure your wallet is connected to **Camp Testnet** and funded with testnet VS tokens.
+🌍 Live Demo
+🔗 camp-genesis-minter.vercel.app
 
----
+📸 Showcase
+Minting UI with live status spinner
 
-## 📵 Live Demo
+NFT preview with JSON metadata
 
-👉 [https://camp-genesis-minter.vercel.app](https://camp-genesis-minter.vercel.app)
+Post-mint success screen with TX details
 
----
+Live gallery with wallet filtering
 
-## 📸 Screenshots (Coming Soon)
-- Minting UI with spinner
-- NFT preview card
-- Result page with metadata + image
-- BlockScout TX proof
-- Live gallery and wallet filtering
+Transaction tracker in action
 
----
+📜 License
+MIT License — free to use, fork, and build upon.
 
-## 📜 License
+🤝 Contributing
+Pull requests are welcome. Whether you want to improve UI, optimize performance, or add features — join in.
 
-MIT License
+💡 Why This Wins
+Real Functionality → Fully operational on-chain minting
 
----
+Polished UX → Smooth, fast, responsive
 
-## 🔧 Dev Scripts
+Technical Completeness → IPFS + Smart Contract + Wallet integration
 
-| Command         | Description                          |
-|-----------------|--------------------------------------|
-| `npm start`     | Start dev server                     |
-| `npm run build` | Build for production                 |
-| `npm test`      | Run tests (TBD)                      |
-| `npm run eject` | Unwrap Vite/Webpack config (careful) |
-
----
-
-## 🤝 Contributing
-
-Pull requests are welcome. This is an open project — fork it, build on it, use it for your Camp-based NFT dApps or testnet showcases.
-
-
-- [Code Splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-- [Bundle Size Analysis](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-- [PWA Guide](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-- [Advanced Config](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-- [Deployment](https://facebook.github.io/create-react-app/docs/deployment)
-- [Build Minify Troubleshooting](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Scalable Base → Can evolve into a full NFT marketplace or badge system
